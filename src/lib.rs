@@ -6,3 +6,4 @@ pub use models::departure::{Departure, TargetFace};
 pub use models::r#match::QualificationMatch;
 pub use models::registry::CompetitionRegistry;
 pub use models::set::Set;
+pub use models::target::{TargetAssignment, TargetPosition};

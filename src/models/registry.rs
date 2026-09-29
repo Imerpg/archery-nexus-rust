@@ -1,5 +1,6 @@
 use crate::models::athlete::{Athlete, Registration, RegistrationStatus};
 use crate::models::departure::Departure;
+use crate::models::target::{TargetAssignment, TargetPosition};
 use std::collections::HashMap;
 
 #[derive(Debug)]
@@ -18,15 +19,18 @@ impl CompetitionRegistry {
         }
     }
 
-    /// Ajoute une vague / départ au concours
     pub fn add_departure(&mut self, departure: Departure) {
         self.departures.insert(departure.id, departure);
     }
 
-    /// Inscrit un archer sur un départ spécifique
-    pub fn register_athlete(&mut self, athlete: Athlete, category: &str, departure_id: u8) -> Result<(), &'static str> {
+    pub fn register_athlete(
+        &mut self,
+        athlete: Athlete,
+        category: &str,
+        departure_id: u8,
+    ) -> Result<(), &'static str> {
         if !self.departures.contains_key(&departure_id) {
-            return Err("Le départ spécifié n'existe pas pour ce concours");
+            return Err("Le départ spécifié n'existe pas");
         }
 
         self.registrations.push(Registration {
@@ -34,12 +38,12 @@ impl CompetitionRegistry {
             category: category.to_string(),
             departure_id,
             status: RegistrationStatus::Pending,
+            target_assignment: None,
         });
 
         Ok(())
     }
 
-    /// Applique le cut-off indépendamment sur chaque départ selon sa capacité propre (`max_athletes`)
     pub fn apply_cutoff(&mut self) {
         let mut by_departure: HashMap<u8, Vec<&mut Registration>> = HashMap::new();
 
@@ -54,7 +58,6 @@ impl CompetitionRegistry {
                 .map(|d| d.max_athletes)
                 .unwrap_or(0);
 
-            // Tri par moyenne nationale décroissante au sein du départ
             regs.sort_by(|a, b| {
                 b.athlete
                     .national_average
@@ -62,22 +65,43 @@ impl CompetitionRegistry {
                     .unwrap_or(std::cmp::Ordering::Equal)
             });
 
-            // Application du quota du départ
             for (index, reg) in regs.iter_mut().enumerate() {
                 if index < max_capacity {
                     reg.status = RegistrationStatus::Confirmed;
                 } else {
                     reg.status = RegistrationStatus::WaitingList;
+                    reg.target_assignment = None; // Reset si mis en attente
                 }
             }
         }
     }
 
-    /// Récupère la liste des archers confirmés pour un départ donné
-    pub fn confirmed_athletes_by_departure(&self, departure_id: u8) -> Vec<&Registration> {
-        self.registrations
-            .iter()
-            .filter(|r| r.status == RegistrationStatus::Confirmed && r.departure_id == departure_id)
-            .collect()
+    pub fn assign_targets(&mut self, departure_id: u8, archers_per_target: u8) {
+        let positions = match archers_per_target {
+            2 => vec![TargetPosition::A, TargetPosition::B],
+            4 => vec![
+                TargetPosition::A,
+                TargetPosition::B,
+                TargetPosition::C,
+                TargetPosition::D,
+            ],
+            _ => vec![TargetPosition::A, TargetPosition::B], // Par défaut 2
+        };
+
+        let mut confirmed_regs: Vec<&mut Registration> = self
+            .registrations
+            .iter_mut()
+            .filter(|r| r.departure_id == departure_id && r.status == RegistrationStatus::Confirmed)
+            .collect();
+
+        for (index, reg) in confirmed_regs.iter_mut().enumerate() {
+            let target_number = ((index as u8) / archers_per_target) + 1;
+            let position_idx = (index as usize) % positions.len();
+            
+            reg.target_assignment = Some(TargetAssignment::new(
+                target_number,
+                positions[position_idx],
+            ));
+        }
     }
 }

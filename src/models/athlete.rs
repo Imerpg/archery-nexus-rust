@@ -1,12 +1,5 @@
+use crate::models::target::TargetAssignment;
 use serde::{Deserialize, Serialize};
-
-#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
-pub enum RegistrationStatus {
-    Pending,
-    Confirmed,
-    WaitingList,
-    Refused,
-}
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Athlete {
@@ -17,10 +10,18 @@ pub struct Athlete {
     pub national_average: f32,
 }
 
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub enum RegistrationStatus {
+    Pending,
+    Confirmed,
+    WaitingList,
+}
+
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Registration {
     pub athlete: Athlete,
     pub category: String,
     pub departure_id: u8,
     pub status: RegistrationStatus,
+    pub target_assignment: Option<TargetAssignment>,
 }
