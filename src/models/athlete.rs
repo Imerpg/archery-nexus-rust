@@ -21,5 +21,6 @@ pub struct Athlete {
 pub struct Registration {
     pub athlete: Athlete,
     pub category: String,
+    pub departure_id: u8,
     pub status: RegistrationStatus,
 }

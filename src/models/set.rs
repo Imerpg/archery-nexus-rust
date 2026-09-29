@@ -12,7 +12,8 @@ impl Set {
     }
 
     pub fn add_arrow(&mut self, score: u8) {
-        self.arrows.push(Arrow::new(score));
+        let order = (self.arrows.len() + 1) as u8;
+        self.arrows.push(Arrow::new(score, order));
     }
 
     pub fn total_score(&self) -> u32 {
