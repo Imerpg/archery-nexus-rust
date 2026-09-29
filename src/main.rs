@@ -40,7 +40,7 @@ fn main() {
         println!("  └─ Capacité     : {} places", dep.max_athletes);
     }
 
-    println!("\n  ┌─ REPARTITION SUR LES CIBLES :");
+    println!("\n  ┌─ REPARTITION SUR LES CIBLES");
 
     for reg in &competition.registrations {
         // Extraction du poste de tir (1A, 1B, 2A, 2B...)
@@ -67,6 +67,8 @@ fn main() {
             reg.athlete.national_average
         );
     }
+
+    println!("  └─ REPARTITION SUR LES CIBLES");
 
     println!("=======================================================================");
 }
