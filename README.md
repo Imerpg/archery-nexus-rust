@@ -24,7 +24,7 @@ Application native multiplateforme ultra-léger et moderne pour la gestion de co
 
 ## 🎯 Philosophie Produit & Ergonomie
 
-- **L'anti-IanSEO :** Code ultra-modulaire, maintenance facile, architecture moderne et lisible.
+- **L'anti-Ianseo :** Code ultra-modulaire, maintenance facile, architecture moderne et lisible.
 - **Simplicité avant tout :** Le cœur de l'application reste minimaliste ; la complexité est déportée dans des modules de règles dynamiques.
 - **Base de données épurée :** Stockage strict de la donnée brute immuable (archers, tirs, impacts) sans calculs complexes enregistrés en dur.
 - **Guidage visuel & Zéro frustration :**
