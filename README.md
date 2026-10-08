@@ -2,6 +2,10 @@
 
 Application native multiplateforme ultra-léger et moderne pour la gestion de compétitions de tir à l'arc.
 
+> **Ianseo** est la solution _open source_ de référence pour la gestion des compétitions de tir à l'arc, en conformité avec les règlements de la **World Archery**. Bien qu'il demeure le logiciel le plus employé à l'échelle mondiale, sa conception datant de 2000 (en PHP et JavaScript natifs) le rend aujourd'hui obsolète sur les plans de l'UI/UX et des performances. Son manque d'ergonomie et sa prise en main laborieuse sont aujourd'hui largement décriés.
+>
+> 🔗 [Lien vers Ianseo pour plus de détails](https://ianseo.net)
+
 ---
 
 ## 🏗️️ Architecture & Stack Technique
